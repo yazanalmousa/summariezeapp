@@ -2,6 +2,7 @@ import React from 'react'
 import { useState,useRef,useEffect } from 'react';
 import Navbar from './Navbar';
 import Warning from './Warning';
+import SummaryPage from './SummaryPage';
 
 function Main() {
   const [file, setFile] = useState(null);
@@ -49,7 +50,6 @@ function Main() {
     setMessage('Generating summary...');
     // Simulate summary generation (replace this with your actual logic)
     const generatedSummary = `This is a simulated summary for the file "${file ? file.name : ''}" with summary type "${summaryType}" and word count "${summaryWordCount}".`;
-    setSummary("generatedSummary");
     setClicked(current => !current)
 
     // send to bacend here
@@ -64,7 +64,10 @@ function Main() {
         body: formData
       })
       if(response.ok){
+        let data = await response.json()
         console.log("file Uploaded")
+        console.log(data.summary)
+        setSummary(data.summary)
       }else{
         console.error("failed to upload")
       }
@@ -118,6 +121,7 @@ function Main() {
           </div>
 
           <button id="summary-button" onClick={handleSummaryButtonClick}>Summarize</button>
+          <SummaryPage summary={summary}/>
         </div>
     </>
   )
