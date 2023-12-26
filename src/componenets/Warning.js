@@ -6,7 +6,10 @@ function Warning(props) {
     <div>
         <div className="alert">
         <a href='/'><span className="closebtn">&times;</span></a>
+        <div className='alert-content'>
         <strong>Warning!</strong> {props.message}
+        <div><i class="fa-solid fa-triangle-exclamation"></i></div>
+        </div>
         </div>
     </div>
   )

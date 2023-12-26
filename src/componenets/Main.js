@@ -18,6 +18,8 @@ function Main() {
   const [warning2,setWarning2] = useState(false)
 
 
+
+
   const handleFileChange = (e) => {
     const file = e.target.files[0]
     setDroppedFile(file)
@@ -77,16 +79,20 @@ function Main() {
 
 
   };
-  if(warning1){
-    return (<Warning message={"Please Enter Only One File"}/>)
-  }
-  if(warning2){
-    return (<Warning message={"Please Enter Only PDF Or DOCX"}/>)
-  }
+  // if(warning1){
+  //   return (<Warning message={"Please Enter Only One File"}/>)
+  // }
+  // if(warning2){
+  //   return (<Warning message={"Please Enter Only PDF Or DOCX"}/>)
+  // }
 
   return (
     <>
         <Navbar/>
+        {<div className='warnings-container1'>
+          {warning1 && <Warning message={"Please Enter Only One File"}/>}
+          {warning2 && <Warning message={"Please Enter Only PDF Or DOCX"}/>}
+        </div>}
         <div id="container">
           <h1 style={{ textAlign: "center" }}>YOUR DOCUMENT SUMMARIZER</h1>
           <div className="file-upload-container">
@@ -121,7 +127,7 @@ function Main() {
           </div>
 
           <button id="summary-button" onClick={handleSummaryButtonClick}>Summarize</button>
-          <SummaryPage summary={summary}/>
+          {clicked && <SummaryPage summary={summary}/>}
         </div>
     </>
   )
