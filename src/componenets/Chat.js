@@ -23,11 +23,6 @@ function Chat() {
       addMessage('user-message', message);
       setUserMessage(message)
       setInputValue('');
-
-      setTimeout(() => {
-        addMessage('agent-message', 'Bot response to: ' + message);
-        scrollToBottom();
-      }, 1000);
     }
   }
 
@@ -49,10 +44,11 @@ function Chat() {
         ws = new WebSocket("ws://localhost:8000/ws");
         ws.onopen = () => ws.send(userMessage);
         ws.onmessage = (e) => {
-          setBotResposne("tasnim")
-            console.log(e);
+          let resposne = JSON.parse(e.data)
+          addMessage('agent-message', resposne.resposne);
+          console.log(resposne.resposne);
         };
-    },[messages]);
+    },[userMessage]);
 
   return ( 
   <div className="app">
