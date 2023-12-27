@@ -1,0 +1,18 @@
+.ner-container{
+    width: 70%;
+    max-height: fit-content;
+    overflow: scroll;
+    display: flex;
+    flex-direction: column;
+    margin: auto;
+    background-color: white;
+    align-items: center;
+    border-radius: 20px;
+}
+.ner-results{
+    border: 2px solid black;
+    width: 90%;
+    text-align: start;
+    padding: 10px;
+    margin-bottom: 10px;border-radius: 10px;
+}

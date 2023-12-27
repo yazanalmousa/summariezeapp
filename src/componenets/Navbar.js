@@ -8,8 +8,6 @@ function Navbar() {
       <div>
         <div id="navbar">
           <a href="/">HOME</a>
-          <a href="/NER">Name-Entity Recognition</a>
-          <a href="/chat">YOUR CHATBOT</a>
         </div>
       </div>
     </div>

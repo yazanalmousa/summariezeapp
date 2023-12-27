@@ -47,6 +47,8 @@ body {
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   border-radius: 2%;
   font-family: 'Roboto Slab', serif;
+  border: 5px solid black;
+  opacity: 90%;
 }
 .file-upload-container {
   display: flex;
@@ -183,7 +185,6 @@ button:hover {
   background-color: #fff;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   overflow: hidden;
-
 }
 
 .container .top-part {
@@ -314,7 +315,7 @@ button:hover {
   }
 }
 #navbar {
-  background-color: white;
+  background-color: rgba(0,0,0,0.6);
   overflow: hidden; 
   font-family: 'Roboto Slab', serif; 
   box-shadow: 0 2px 5px rgba(0,0,0,0.2); 
@@ -323,12 +324,13 @@ button:hover {
   top: 0; 
   z-index: 1000; 
   left: 0px;
+  color: white;
 }
 
 #navbar a {
   float: left; 
   display: flex; 
-  color: black; 
+  color: white; 
   text-align: center; 
   padding: 14px 16px; 
   text-decoration: none; 
@@ -406,4 +408,9 @@ input[type=text], select {
   position: relative;
   top: 35rem;
 }
-
+.summary-btn{
+  min-height: 60px;
+}
+.chatbot-btn{
+  margin-top: 30px;
+}

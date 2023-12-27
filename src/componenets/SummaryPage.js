@@ -1,26 +1,31 @@
 import '../summarypage.css'
-import { useEffect,useState } from 'react';
+import { useEffect,useRef,useState } from 'react';
 
 function SummaryPage(props) {
-    // const [summary,setSummary] = useState('')
-    // useEffect(() => {
-    //     setSummary("You Summary Appears Here");
-    // },[])
-    function handleHieght(){
-        const textarea = document.querySelector("textarea");
-        textarea.addEventListener("keyup", e => {
-         textarea.style.height = 'auto'
-        let scHeigth = e.target.scrollHeight;
-        textarea.style.height = `${scHeigth}px `
-        })
-      }
+    const [text,setText] = useState('')
+    const textareaRef = useRef(null)
+    useEffect(() => {
+        const adjustHeight =() => {
+            if(textareaRef.current){
+                textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`
+                textareaRef.current.focus();
+            }
+        }
+        adjustHeight();
+    },[text])
+     useEffect(() => {
+        setText(props.summary)
+     },[props.summary])
   return (
     <div className='summary-container'>
         <div className='actual-summary'>
-            <h1>Generated Summary <span><i className="fa-solid fa-robot"></i></span></h1>
+            <h1>{props.title}<span><i className="fa-solid fa-robot"></i></span></h1>
             <div className='text-area'>
-            <textarea value={props.summary} className="form-control" placeholder="Summary" id="floatingTextarea2Disabled" style={{height: "100px"}} onChange={handleHieght}  ></textarea>
+            <textarea value={text} ref={textareaRef} className="form-control" placeholder="Summary" id="floatingTextarea2Disabled"></textarea>
             </div>
+            
+
+            
         </div>
 
     </div>

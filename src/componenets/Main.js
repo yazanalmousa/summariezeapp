@@ -1,24 +1,28 @@
 import React from 'react'
-import { useState,useRef,useEffect } from 'react';
+import { useState,useRef } from 'react';
 import Navbar from './Navbar';
-import Warning from './Warning';
 import SummaryPage from './SummaryPage';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { css } from '@emotion/react';
+import { ClipLoader } from 'react-spinners';
+import NerPage from './NerPage';
 
 function Main() {
-  const [file, setFile] = useState(null);
-  const [summaryWordCount, setSummaryWordCount] = useState('');
-  const [summaryType, setSummaryType] = useState('Abstract');
-  const [message, setMessage] = useState('');
+  const [length,setLength] = useState(3)
+  const [selectValue,SetselectValue] = useState('Abstract')
+
+
+
   const [summary, setSummary] = useState('');
-  const [clicked,setClicked] = useState(false)
+  const [loading, setLoading] = useState(false);
   const fileInputRef = useRef(null);
 
   const [droppedFile, setDroppedFile] = useState(null);
-  const [warning1,setWarning] = useState(false)
-  const [warning2,setWarning2] = useState(false)
 
-
-
+  const loaderStyles = css`
+  marging: auto;
+`;
 
   const handleFileChange = (e) => {
     const file = e.target.files[0]
@@ -36,10 +40,10 @@ function Main() {
         setDroppedFile(file);
         console.log(droppedFile)
       } else {
-        setWarning2(true)
+        toast.error('Invalid file type. only PDF and DOCX are accepted');
       }
     } else {
-      setWarning(true)
+      toast.error('Only one file is accepted at a time.');
     }
   };
 
@@ -49,15 +53,12 @@ function Main() {
 
 
   const handleSummaryButtonClick = async () => {
-    setMessage('Generating summary...');
-    // Simulate summary generation (replace this with your actual logic)
-    const generatedSummary = `This is a simulated summary for the file "${file ? file.name : ''}" with summary type "${summaryType}" and word count "${summaryWordCount}".`;
-    setClicked(current => !current)
-
-    // send to bacend here
-
+    setLoading(true);
     const formData = new FormData();
     formData.append('file_upload',droppedFile) 
+    formData.append('summary_length',length) 
+    formData.append('details_level',selectValue) 
+
 
     try{
       const endPoint = 'http://localhost:8000/uploadfile/'
@@ -75,25 +76,39 @@ function Main() {
       }
     }catch(error){
       console.error("connection failed")
+    } finally{
+      setLoading(false);
     }
-
-
   };
-  // if(warning1){
-  //   return (<Warning message={"Please Enter Only One File"}/>)
-  // }
-  // if(warning2){
-  //   return (<Warning message={"Please Enter Only PDF Or DOCX"}/>)
-  // }
+  const handleLengthChange = (e) => {
+      const checkData = e.target.value
+      if (!/^[0-9]+$/.test(checkData) && checkData !== "") {
+        // Display an alert if the value is not numeric
+        toast.error('Only numeric values are allowed');
+        e.target.value = ""
+      } else {
+        // Handle saving settings logic here
+        setLength(checkData)
+        console.log('Settings saved:', { checkData });
+      }
+      
+  }
+  const handleSelectChange = (e) => {
+    const selectCheck = e.target.value
+    if(e.target.value !== 'Select level of Details'){
+    console.log(selectCheck)
+    SetselectValue(selectCheck)
+    }else{
+      SetselectValue('Abstract')
+      console.log(selectValue)
+    }
+  }
 
   return (
     <>
         <Navbar/>
-        {<div className='warnings-container1'>
-          {warning1 && <Warning message={"Please Enter Only One File"}/>}
-          {warning2 && <Warning message={"Please Enter Only PDF Or DOCX"}/>}
-        </div>}
         <div id="container">
+        <ToastContainer />
           <h1 style={{ textAlign: "center" }}>YOUR DOCUMENT SUMMARIZER</h1>
           <div className="file-upload-container">
             <div className="file-upload-box">
@@ -111,24 +126,23 @@ function Main() {
             </div>
             <div className="settings-box">
               <i className='bx bx-cog' style={{ fontSize: "100px" }}></i>
-              <input type="text" id="fname" name="firstname" placeholder="Enter the length of the summary"
-                value={summaryWordCount}
-                onChange={e => setSummaryWordCount(e.target.value)}/>
+              <input type="text" id="fname" name="firstname" placeholder="Enter the length of the summary" onChange={handleLengthChange}/>
               <select
                 id="summary-type"
-                value={summaryType}
-                onChange={e => setSummaryType(e.target.value)}
+                onChange={handleSelectChange}
               >
-                <option value="">Select level of Details</option>
-                <option value="High">Detailed</option>
-                <option value="Medium">Abstract</option>
+                <option value="Detailed">Detailed</option>
+                <option value="Abstract">Abstract</option>
               </select>
             </div>
           </div>
-
-          <button id="summary-button" onClick={handleSummaryButtonClick}>Summarize</button>
-          {clicked && <SummaryPage summary={summary}/>}
+          <button className='summary-btn' id="summary-button" onClick={handleSummaryButtonClick}><b>{!loading ? "Summarize":(<ClipLoader css={loaderStyles} size={35} color={'#36D7B7'} loading={loading} />)}</b></button>
+            
+           <SummaryPage title="Generated Summary " summary={summary}/>
+            
+           <button className='chatbot-btn'><i class="fa-solid fa-arrow-right"></i> Chat With Your Data <i className="fa-solid fa-robot"></i></button>
         </div>
+        
     </>
   )
 }

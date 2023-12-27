@@ -1,9 +1,7 @@
-import React, { useState, useEffect, useRef } from 'react';
 import './App.css';
 import Main from './componenets/Main';
 import { Route, Routes } from 'react-router-dom';
 import SummaryPage from './componenets/SummaryPage';
-
 
 
 function App() {
