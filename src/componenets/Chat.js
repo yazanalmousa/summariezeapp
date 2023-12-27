@@ -2,10 +2,15 @@ import React, { useState, useRef, useEffect } from 'react';
 import '../chat.css'
 
 function Chat() {
+
+  
+
   const [messages, setMessages] = useState([]);
   const [inputValue, setInputValue] = useState("");
   const messagesEndRef = useRef(null);
   const chatRef = useRef(null);
+  const [userMessage,setUserMessage] = useState("")
+  const [botResposne,setBotResposne] = useState("")
 
 
   function addMessage(type, text) {
@@ -16,6 +21,7 @@ function Chat() {
     const message = inputValue.trim();
     if (message) {
       addMessage('user-message', message);
+      setUserMessage(message)
       setInputValue('');
 
       setTimeout(() => {
@@ -36,6 +42,17 @@ function Chat() {
   };
 
   useEffect(scrollToBottom, [messages]);
+
+  var ws = null;
+  useEffect(() => {
+        console.log(messages)
+        ws = new WebSocket("ws://localhost:8000/ws");
+        ws.onopen = () => ws.send(userMessage);
+        ws.onmessage = (e) => {
+          setBotResposne("tasnim")
+            console.log(e);
+        };
+    },[messages]);
 
   return ( 
   <div className="app">

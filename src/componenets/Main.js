@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useState,useRef } from 'react';
 import Navbar from './Navbar';
 import SummaryPage from './SummaryPage';
@@ -14,6 +14,7 @@ function Main() {
 
 
   const [summary, setSummary] = useState('');
+  const [ner, setNer] = useState(null);
   const [loading, setLoading] = useState(false);
   const fileInputRef = useRef(null);
 
@@ -70,11 +71,14 @@ function Main() {
         console.log("file Uploaded")
         console.log(data.summary)
         setSummary(data.summary)
+        setNer(data.ner)
         setBtn(true)
       }else{
+        toast.error('Failed to upload!');
         console.error("failed to upload")
       }
     }catch(error){
+      toast.error('Something went wrong!');
       console.error("connection failed")
     } finally{
       setLoading(false);
@@ -103,7 +107,7 @@ function Main() {
       console.log(selectValue)
     }
   }
-
+  
   return (
     <>
         <Navbar/>
@@ -138,7 +142,7 @@ function Main() {
           </div>
           <button className='summary-btn' id="summary-button" onClick={handleSummaryButtonClick}><b>{!loading ? "Summarize":(<ClipLoader css={loaderStyles} size={35} color={'#36D7B7'} loading={loading} />)}</b></button>
             
-           <SummaryPage title="Generated Summary " summary={summary}/>
+           <SummaryPage title="Generated Summary " summary={summary} ner={ner}/>
             
            {showBtn && <a href='/chat' className='chatbot-direct'><button className='chatbot-btn'><i className="fa-solid fa-robot"></i> Chat With Your Data <i class="fa-solid fa-arrow-right"></i></button></a>}
         </div>

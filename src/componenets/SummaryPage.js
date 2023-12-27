@@ -14,7 +14,14 @@ function SummaryPage(props) {
         adjustHeight();
     },[text])
      useEffect(() => {
-        setText(props.summary)
+        let ner_text = ""
+        if(props.ner){
+            Object.keys(props.ner).map(key=>(
+                ner_text = ner_text.concat(key + ": " + props.ner[key].join(", ") + ".\n\n")
+            ))
+        }
+        let text = props.summary + "\n\n\n" + ner_text
+        setText(text)
      },[props.summary])
   return (
     <div className='summary-container'>
