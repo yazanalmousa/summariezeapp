@@ -6,12 +6,11 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { css } from '@emotion/react';
 import { ClipLoader } from 'react-spinners';
-import NerPage from './NerPage';
 
 function Main() {
   const [length,setLength] = useState(3)
   const [selectValue,SetselectValue] = useState('Abstract')
-
+  const [showBtn,setBtn] = useState(false)
 
 
   const [summary, setSummary] = useState('');
@@ -71,6 +70,7 @@ function Main() {
         console.log("file Uploaded")
         console.log(data.summary)
         setSummary(data.summary)
+        setBtn(true)
       }else{
         console.error("failed to upload")
       }
@@ -140,9 +140,8 @@ function Main() {
             
            <SummaryPage title="Generated Summary " summary={summary}/>
             
-           <button className='chatbot-btn'><i class="fa-solid fa-arrow-right"></i> Chat With Your Data <i className="fa-solid fa-robot"></i></button>
+           {showBtn && <a href='/chat' className='chatbot-direct'><button className='chatbot-btn'><i className="fa-solid fa-robot"></i> Chat With Your Data <i class="fa-solid fa-arrow-right"></i></button></a>}
         </div>
-        
     </>
   )
 }

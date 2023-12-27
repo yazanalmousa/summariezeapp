@@ -414,3 +414,7 @@ input[type=text], select {
 .chatbot-btn{
   margin-top: 30px;
 }
+.chatbot-direct{
+  display: block;
+  text-decoration: none;
+}
