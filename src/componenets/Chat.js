@@ -85,6 +85,7 @@ function Chat() {
       </div>
     </div>
     </div>
+    <a href='/'><button type="button" class="btn btn-danger">Back</button></a>
     </div>
 
   );

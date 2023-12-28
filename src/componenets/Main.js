@@ -6,8 +6,12 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { css } from '@emotion/react';
 import { ClipLoader } from 'react-spinners';
+import '../App.css'
 
 function Main() {
+
+  const [error,setError] = useState(false)
+
   const [length,setLength] = useState(3)
   const [selectValue,SetselectValue] = useState('Abstract')
   const [showBtn,setBtn] = useState(false)
@@ -88,9 +92,10 @@ function Main() {
       const checkData = e.target.value
       if (!/^[0-9]+$/.test(checkData) && checkData !== "") {
         // Display an alert if the value is not numeric
-        toast.error('Only numeric values are allowed');
+        setError(true)
         e.target.value = ""
       } else {
+        setError(false)
         // Handle saving settings logic here
         setLength(checkData)
         console.log('Settings saved:', { checkData });
@@ -107,10 +112,9 @@ function Main() {
       console.log(selectValue)
     }
   }
-  
+
   return (
     <>
-        <Navbar/>
         <div id="container">
         <ToastContainer />
           <h1 style={{ textAlign: "center" }}>YOUR DOCUMENT SUMMARIZER</h1>
@@ -125,21 +129,24 @@ function Main() {
                 onChange={handleFileChange}
                 ref={fileInputRef}
               />
-              <label htmlFor="file-upload"><i className='bx bxs-download' style={{ fontSize: "100px" }}></i><br />{droppedFile ? droppedFile.name:"Drag & Drop file Here or click to Browse"}</label>
+              <label htmlFor="file-upload"><i class='bx bx-upload'style={{fontSize : "100px"}} ></i><br/>{droppedFile ? droppedFile.name:"Drag & Drop file Here or click to Browse"}</label>
               </form>
             </div>
             <div className="settings-box">
-              <i className='bx bx-cog' style={{ fontSize: "100px" }}></i>
-              <input type="text" id="fname" name="firstname" placeholder="Enter the length of the summary" onChange={handleLengthChange}/>
+              <div><i className='bx bx-cog' style={{ fontSize: "100px" }}></i></div>
+              <label for = 'length'>Set the number of sentences</label>
+              <input type="text" id="length" name="firstname" placeholder="Enter the length of the summary" className={error ? "error-message" : "normal-input"} onChange={handleLengthChange}/>
+              <label for='summary-type'>set the level of details</label>
               <select
                 id="summary-type"
                 onChange={handleSelectChange}
               >
-                <option value="Detailed">Detailed</option>
                 <option value="Abstract">Abstract</option>
+                <option value="Detailed">Detailed</option>
               </select>
             </div>
           </div>
+          <p className='note'>*Note: Summary Setting Are Optional <span><i class="fa-solid fa-filter"></i></span></p>
           <button className='summary-btn' id="summary-button" onClick={handleSummaryButtonClick}><b>{!loading ? "Summarize":(<ClipLoader css={loaderStyles} size={35} color={'#36D7B7'} loading={loading} />)}</b></button>
             
            <SummaryPage title="Generated Summary " summary={summary} ner={ner}/>
